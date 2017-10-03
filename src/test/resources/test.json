@@ -1,0 +1,22 @@
+{
+  "user": {
+    "name": "Tyrion Lannister",
+    "age": 38,
+    "kawaii": true,
+    "height": 1.47,
+    "subscribers": [
+      {
+        "name": "Alex",
+        "likes": 33
+      },
+      {
+        "name": "Olly",
+        "likes": 12
+      }
+    ],
+    "status": {
+      "active": true,
+      "blocked": false
+    }
+  }
+}
