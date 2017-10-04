@@ -55,7 +55,11 @@ private fun generateDomain(json: JsonNode, pojoName: String, packageName: String
 		val nodeName = it.key!!
 
 		val fieldType = javaTypeFromJsonType(node, nodeName, packageName, ::domainNameFromPojoName)
-		val fieldSpec = FieldSpec.builder(fieldType, nodeName, PUBLIC).build()
+		val serializedAnnotation = AnnotationSpec.builder(ClassName.bestGuess("com.google.gson.annotations.SerializedName"))
+				.addMember("value", "\$S", nodeName).build()
+		val fieldSpec = FieldSpec.builder(fieldType, nodeName, PUBLIC)
+				.addAnnotation(serializedAnnotation)
+				.build()
 
 		fieldSpecs.add(fieldSpec)
 	}
