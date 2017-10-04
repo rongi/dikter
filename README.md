@@ -1,4 +1,4 @@
-## Generates java classes and transformation methods from json.
+## Generates java classes and transformation methods from json
 
 # Install
 
