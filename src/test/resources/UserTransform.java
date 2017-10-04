@@ -11,6 +11,7 @@ import java.util.List;
 
 public final class UserTransform {
     public static User fromRest(UserRest rest) {
+        if (rest == null) return null;
         User entity = new User();
 
         entity.setName(rest.name);
@@ -24,6 +25,7 @@ public final class UserTransform {
     }
 
     public static UserRest fromEntity(User entity) {
+        if (entity == null) return null;
         UserRest rest = new UserRest();
 
         rest.name = entity.getName();
@@ -39,30 +41,36 @@ public final class UserTransform {
     private static List<Subscriber> subscribersFromRest(List<SubscriberRest> rests) {
         List<Subscriber> entities = new ArrayList<>();
 
-        for (SubscriberRest rest : rests) {
-            Subscriber entity = SubscriberTransform.fromRest(rest);
-            entities.add(entity);
+        if (rests != null) {
+            for (SubscriberRest rest : rests) {
+                Subscriber entity = SubscriberTransform.fromRest(rest);
+                entities.add(entity);
+            }
         }
 
         return entities;
     }
 
     private static Status statusFromRest(StatusRest rest) {
+        if (rest == null) return null;
         return StatusTransform.fromRest(rest);
     }
 
     private static List<SubscriberRest> subscribersFromEntity(List<Subscriber> entities) {
         List<SubscriberRest> rests = new ArrayList<>();
 
-        for (Subscriber entity : entities) {
-            SubscriberRest rest = SubscriberTransform.fromEntity(entity);
-            rests.add(rest);
+        if (entities != null) {
+            for (Subscriber entity : entities) {
+                SubscriberRest rest = SubscriberTransform.fromEntity(entity);
+                rests.add(rest);
+            }
         }
 
         return rests;
     }
 
     private static StatusRest statusFromEntity(Status entity) {
+        if (entity == null) return null;
         return StatusTransform.fromEntity(entity);
     }
 }
