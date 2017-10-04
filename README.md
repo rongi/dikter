@@ -4,7 +4,7 @@
 
 ```
 brew tap rongi/tap
-brew install merge-fix
+brew install dikter
 ```
 
 ## Usage
