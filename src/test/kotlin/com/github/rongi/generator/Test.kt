@@ -18,9 +18,9 @@ class Test {
 		val domain = generated.domain
 		val entity = generated.entity
 		val transform = generated.transform
-		assertEquals("com/example/test/domain/ResponseRest.java", domain.toJavaFileObject().name)
-		assertEquals("com/example/test/entity/Response.java", entity.toJavaFileObject().name)
-		assertEquals("com/example/test/transform/ResponseTransform.java", transform.toJavaFileObject().name)
+		assertEquals("com/example/test/domain/ApiResponseRest.java", domain.toJavaFileObject().name)
+		assertEquals("com/example/test/entity/ApiResponse.java", entity.toJavaFileObject().name)
+		assertEquals("com/example/test/transform/ApiResponseTransform.java", transform.toJavaFileObject().name)
 	}
 
 	@Test
@@ -31,8 +31,8 @@ class Test {
 
 		val domain = generated.domain
 		val entity = generated.entity
-		val expectedDomain = getFile("ResponseRest.java")
-		val expectedEntity = getFile("Response.java")
+		val expectedDomain = getFile("ApiResponseRest.java")
+		val expectedEntity = getFile("ApiResponse.java")
 		assertEquals(expectedDomain, domain.toString())
 		assertEquals(expectedEntity, entity.toString())
 	}

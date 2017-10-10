@@ -1,6 +1,6 @@
 package com.example.test.entity;
 
-public final class Response {
+public final class ApiResponse {
     private User user;
 
     public User getUser() {

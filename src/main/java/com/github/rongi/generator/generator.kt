@@ -4,7 +4,6 @@ package com.github.rongi.generator
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.node.JsonNodeType
 import com.fasterxml.jackson.databind.node.JsonNodeType.ARRAY
 import com.fasterxml.jackson.databind.node.JsonNodeType.OBJECT
 import com.squareup.javapoet.*
@@ -13,7 +12,7 @@ import java.util.*
 import java.util.List
 import javax.lang.model.element.Modifier.*
 
-private const val ROOT_CLASS_NAME = "Response"
+private const val ROOT_CLASS_NAME = "ApiResponse"
 const val INDENT = "    "
 const val DOMAIN_SUFFIX = "Rest"
 
