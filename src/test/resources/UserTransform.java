@@ -11,7 +11,7 @@ import com.example.test.entity.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class UserTransform {
+public abstract class UserTransform {
     public static User fromRest(UserRest rest) {
         if (rest == null) return null;
         User entity = new User();

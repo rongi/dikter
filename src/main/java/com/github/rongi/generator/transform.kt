@@ -44,7 +44,7 @@ fun generateTransform(pojoName: String, domainFile: JavaFile, entityFile: JavaFi
 
 	val className = "$pojoName${TRANSFORM_SUFFIX}"
 	val typeSpecBuilder = TypeSpec.classBuilder(className)
-			.addModifiers(PUBLIC, FINAL)
+			.addModifiers(PUBLIC, ABSTRACT)
 			.addMethods(methodSpecs)
 			.build();
 
