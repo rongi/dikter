@@ -18,17 +18,27 @@ const val DOMAIN_SUFFIX = "Rest"
 
 fun generate(json: File, domainPackage: String, entityPackage: String, transformPackage: String): Generated {
 	val root = ObjectMapper().readTree(json)
-	val gsonParser = generate(root, ROOT_CLASS_NAME, domainPackage, entityPackage, transformPackage)
-	return gsonParser
+	return generate(
+		root,
+		ROOT_CLASS_NAME,
+		domainPackage,
+		entityPackage,
+		transformPackage
+	)
 }
 
 fun generate(json: String, domainPackage: String, entityPackage: String, transformPackage: String): Generated {
 	val root = ObjectMapper().readTree(json)
-	val gsonParser = generate(root, ROOT_CLASS_NAME, domainPackage, entityPackage, transformPackage)
-	return gsonParser
+	return generate(
+		root,
+		ROOT_CLASS_NAME,
+		domainPackage,
+		entityPackage,
+		transformPackage
+	)
 }
 
-fun generate(json: JsonNode, pojoName: String, domainPackage: String, entityPackage: String, transformPackage: String): Generated {
+private fun generate(json: JsonNode, pojoName: String, domainPackage: String, entityPackage: String, transformPackage: String): Generated {
 	val fromChildren = ArrayList<Generated>()
 
 	json.fields().forEach {
@@ -134,15 +144,17 @@ fun getterNameFor(fieldName: String): String {
 private fun javaTypeFromJsonType(node: JsonNode, nodeName: String, packageName: String, pojoToClass: (String) -> String): TypeName {
 	val javaType: TypeName
 
-	if (node.nodeType == OBJECT) {
-		javaType = ClassName.get(packageName, pojoToClass(pojoNameFromNodeName(nodeName)))
-	} else if (node.nodeType == ARRAY) {
-		val listClassName = ClassName.get(List::class.java);
-		val fieldItemClassName = pojoToClass(pojoNameFromArrayNodeName(nodeName))
-		val fieldItemType = ClassName.get(packageName, fieldItemClassName)
-		javaType = ParameterizedTypeName.get(listClassName, fieldItemType);
-	} else {
-		javaType = fieldTypeFromJsonToken(node)
+	when {
+		node.nodeType == OBJECT || node.isNull -> {
+			javaType = ClassName.get(packageName, pojoToClass(pojoNameFromNodeName(nodeName)))
+		}
+		node.nodeType == ARRAY -> {
+			val listClassName = ClassName.get(List::class.java);
+			val fieldItemClassName = pojoToClass(pojoNameFromArrayNodeName(nodeName))
+			val fieldItemType = ClassName.get(packageName, fieldItemClassName)
+			javaType = ParameterizedTypeName.get(listClassName, fieldItemType)
+		}
+		else -> javaType = fieldTypeFromJsonToken(node)
 	}
 
 	return javaType
@@ -159,8 +171,9 @@ private fun fieldTypeFromJsonToken(node: JsonNode): TypeName {
 	}
 }
 
+
 private fun generateFromChild(node: JsonNode, nodeName: String, domainPackage: String, entityPackage: String, transformPackage: String): Generated? {
-	if (node.nodeType == OBJECT) {
+	if (node.nodeType == OBJECT || node.isNull) {
 		val pojoName = pojoNameFromNodeName(nodeName)
 		return generate(node, pojoName, domainPackage, entityPackage, transformPackage)
 	} else if (node.nodeType == ARRAY) {

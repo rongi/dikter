@@ -17,6 +17,8 @@ public final class User {
 
     private List<Comment> comments;
 
+    private Image image;
+
     public String getName() {
         return name;
     }
@@ -71,5 +73,13 @@ public final class User {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 }

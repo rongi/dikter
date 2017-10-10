@@ -1,10 +1,12 @@
 package com.example.test.transform;
 
 import com.example.test.domain.CommentRest;
+import com.example.test.domain.ImageRest;
 import com.example.test.domain.StatusRest;
 import com.example.test.domain.SubscriberRest;
 import com.example.test.domain.UserRest;
 import com.example.test.entity.Comment;
+import com.example.test.entity.Image;
 import com.example.test.entity.Status;
 import com.example.test.entity.Subscriber;
 import com.example.test.entity.User;
@@ -23,6 +25,7 @@ public abstract class UserTransform {
         entity.setSubscribers(subscribersFromRest(rest.subscribers));
         entity.setStatus(statusFromRest(rest.status));
         entity.setComments(commentsFromRest(rest.comments));
+        entity.setImage(imageFromRest(rest.image));
 
         return entity;
     }
@@ -38,6 +41,7 @@ public abstract class UserTransform {
         rest.subscribers = subscribersFromEntity(entity.getSubscribers());
         rest.status = statusFromEntity(entity.getStatus());
         rest.comments = commentsFromEntity(entity.getComments());
+        rest.image = imageFromEntity(entity.getImage());
 
         return rest;
     }
@@ -73,6 +77,11 @@ public abstract class UserTransform {
         return entities;
     }
 
+    private static Image imageFromRest(ImageRest rest) {
+        if (rest == null) return null;
+        return ImageTransform.fromRest(rest);
+    }
+
     private static List<SubscriberRest> subscribersFromEntity(List<Subscriber> entities) {
         List<SubscriberRest> rests = new ArrayList<>();
 
@@ -102,5 +111,10 @@ public abstract class UserTransform {
         }
 
         return rests;
+    }
+
+    private static ImageRest imageFromEntity(Image entity) {
+        if (entity == null) return null;
+        return ImageTransform.fromEntity(entity);
     }
 }

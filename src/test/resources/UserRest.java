@@ -24,4 +24,7 @@ public final class UserRest {
 
     @SerializedName("comments")
     public List<CommentRest> comments;
+
+    @SerializedName("image")
+    public ImageRest image;
 }
