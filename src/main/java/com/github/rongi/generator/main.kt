@@ -102,8 +102,7 @@ fun initEnvironment() {
 						src=project/src/main/java/
 						domainPackage=com.example.test.domain
 						entityPackage=com.example.test.entities
-						transformPackage=com.example.test.transform
-						""".trimIndent()
+						transformPackage=com.example.test.transform""".trimIndent()
 
 	val out = PrintWriter(DEFAULT_CONFIG_FILE)
 	out.println(INITIAL_PROPERTIES)
