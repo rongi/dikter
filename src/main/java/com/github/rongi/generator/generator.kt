@@ -55,24 +55,24 @@ private fun generateDomain(json: JsonNode, pojoName: String, packageName: String
 
 		val fieldType = javaTypeFromJsonType(node, nodeName, packageName, ::domainNameFromPojoName)
 		val serializedAnnotation = AnnotationSpec.builder(ClassName.bestGuess("com.google.gson.annotations.SerializedName"))
-				.addMember("value", "\$S", nodeName).build()
+			.addMember("value", "\$S", nodeName).build()
 		val fieldSpec = FieldSpec.builder(fieldType, nodeName, PUBLIC)
-				.addAnnotation(serializedAnnotation)
-				.build()
+			.addAnnotation(serializedAnnotation)
+			.build()
 
 		fieldSpecs.add(fieldSpec)
 	}
 
 	val className = domainNameFromPojoName(pojoName)
 	val typeSpecBuilder = TypeSpec.classBuilder(className)
-			.addFields(fieldSpecs)
-			.addModifiers(PUBLIC, FINAL)
-			.build();
+		.addFields(fieldSpecs)
+		.addModifiers(PUBLIC, FINAL)
+		.build();
 
 	val javaFile = JavaFile.builder(packageName, typeSpecBuilder)
-			.indent(INDENT)
-			.skipJavaLangImports(true)
-			.build()
+		.indent(INDENT)
+		.skipJavaLangImports(true)
+		.build()
 
 	return javaFile
 }
@@ -91,17 +91,17 @@ private fun generateEntity(json: JsonNode, pojoName: String, packageName: String
 
 		val getterName = getterNameFor(fieldName)
 		val getterSpec = MethodSpec.methodBuilder(getterName)
-				.addModifiers(PUBLIC)
-				.returns(fieldType)
-				.addStatement("return $fieldName")
-				.build()
+			.addModifiers(PUBLIC)
+			.returns(fieldType)
+			.addStatement("return $fieldName")
+			.build()
 
 		val setterName = setterNameFor(fieldName)
 		val setterSpec = MethodSpec.methodBuilder(setterName)
-				.addModifiers(PUBLIC)
-				.addParameter(fieldType, fieldName)
-				.addStatement("this.$fieldName = $fieldName")
-				.build()
+			.addModifiers(PUBLIC)
+			.addParameter(fieldType, fieldName)
+			.addStatement("this.$fieldName = $fieldName")
+			.build()
 
 		fieldSpecs.add(fieldSpec)
 		methodSpecs.add(getterSpec)
@@ -110,15 +110,15 @@ private fun generateEntity(json: JsonNode, pojoName: String, packageName: String
 
 	val className = entityNameFromPojoName(pojoName)
 	val typeSpecBuilder = TypeSpec.classBuilder(className)
-			.addFields(fieldSpecs)
-			.addMethods(methodSpecs)
-			.addModifiers(PUBLIC, FINAL)
-			.build();
+		.addFields(fieldSpecs)
+		.addMethods(methodSpecs)
+		.addModifiers(PUBLIC, FINAL)
+		.build();
 
 	val javaFile = JavaFile.builder(packageName, typeSpecBuilder)
-			.indent(INDENT)
-			.skipJavaLangImports(true)
-			.build()
+		.indent(INDENT)
+		.skipJavaLangImports(true)
+		.build()
 
 	return javaFile
 }
@@ -169,13 +169,13 @@ private fun generateFromChild(node: JsonNode, nodeName: String, domainPackage: S
 		val element = if (nodeElements.hasNext()) {
 			nodeElements.next()
 		} else {
-			ObjectMapper().readTree("{}")
+			ObjectMapper().createObjectNode()
 		}
 
 		val pojoName = pojoNameFromArrayNodeName(nodeName)
 		return generate(element, pojoName, domainPackage, entityPackage, transformPackage)
 	} else {
-		return  null
+		return null
 	}
 }
 

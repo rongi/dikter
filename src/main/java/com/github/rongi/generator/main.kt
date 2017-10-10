@@ -2,7 +2,10 @@
 
 package com.github.rongi.generator
 
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
+import java.io.PrintWriter
 import java.util.*
 import kotlin.system.exitProcess
 
@@ -18,7 +21,7 @@ fun main(args: Array<String>) {
 
 	val configFile = File(DEFAULT_CONFIG_FILE);
 
-	if (args.size >=1 && args[0] == "--init") {
+	if (args.size >= 1 && args[0] == "--init") {
 		initEnvironment()
 		return
 	}
@@ -64,14 +67,14 @@ fun Generated.dumpRecursively(outputDir: String) {
 }
 
 fun exitWithHelpMessage() {
-	exitWithMessage("usage: \n"  +
-			"dikter <json_file> <path_where_to_generate> <domain_package> <entity_package> <transform_package>\n" +
-			"or\n" +
-			"dikter <json_file>\n" +
-			"if you have file dikter.properties in the working directory\n" +
-			"with properties: src, domainPackage, entityPackage, then use this util with:\n" +
-			"dikter --init\n" +
-			"Creates properties file\n")
+	exitWithMessage("usage: \n" +
+		"dikter <json_file> <path_where_to_generate> <domain_package> <entity_package> <transform_package>\n" +
+		"or\n" +
+		"dikter <json_file>\n" +
+		"if you have file dikter.properties in the working directory\n" +
+		"with properties: src, domainPackage, entityPackage, then use this util with:\n" +
+		"dikter --init\n" +
+		"Creates properties file\n")
 }
 
 private fun exitWithMessage(message: String) {
