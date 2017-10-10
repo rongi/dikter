@@ -17,6 +17,9 @@ only to the json file. Like this:
 
 `dikter <json_file>`
 
+`dikter --init`
+
+Creates properties file
 
 ## Build
 

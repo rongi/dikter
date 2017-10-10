@@ -2,13 +2,11 @@
 
 package com.github.rongi.generator
 
-import java.io.File
-import java.io.FileInputStream
-import java.io.IOException
+import java.io.*
 import java.util.*
 import kotlin.system.exitProcess
 
-private val DEFAULT_CONFIG_FILE = "dikter.properties"
+private const val DEFAULT_CONFIG_FILE = "dikter.properties"
 
 fun main(args: Array<String>) {
 	val domainPackage: String
@@ -19,6 +17,12 @@ fun main(args: Array<String>) {
 	val fileName: String
 
 	val configFile = File(DEFAULT_CONFIG_FILE);
+
+	if (args.size >=1 && args[0] == "--init") {
+		initEnvironment()
+		return
+	}
+
 	if (configFile.exists() && !configFile.isDirectory) {
 		val properties = readProperties()
 
@@ -60,12 +64,14 @@ fun Generated.dumpRecursively(outputDir: String) {
 }
 
 fun exitWithHelpMessage() {
-	exitWithMessage("usage: " +
+	exitWithMessage("usage: \n"  +
 			"dikter <json_file> <path_where_to_generate> <domain_package> <entity_package> <transform_package>\n" +
 			"or\n" +
 			"dikter <json_file>\n" +
 			"if you have file dikter.properties in the working directory\n" +
-			"with properties: src, domainPackage, entityPackage, then use this util with:\n")
+			"with properties: src, domainPackage, entityPackage, then use this util with:\n" +
+			"dikter --init\n" +
+			"Creates properties file\n")
 }
 
 private fun exitWithMessage(message: String) {
@@ -86,4 +92,19 @@ fun readProperties(): Properties {
 	}
 
 	return properties
+}
+
+fun initEnvironment() {
+	val INITIAL_PROPERTIES = """
+						src=project/src/main/java/
+						domainPackage=com.example.test.domain
+						entityPackage=com.example.test.entities
+						transformPackage=com.example.test.transform
+						""".trimIndent()
+
+	val out = PrintWriter(DEFAULT_CONFIG_FILE)
+	out.println(INITIAL_PROPERTIES)
+	out.close()
+
+	println("dikter properties created")
 }
