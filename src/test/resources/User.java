@@ -15,6 +15,8 @@ public final class User {
 
     private Status status;
 
+    private List<Comment> comments;
+
     public String getName() {
         return name;
     }
@@ -61,5 +63,13 @@ public final class User {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

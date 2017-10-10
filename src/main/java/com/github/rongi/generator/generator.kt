@@ -166,10 +166,15 @@ private fun generateFromChild(node: JsonNode, nodeName: String, domainPackage: S
 		return generate(node, pojoName, domainPackage, entityPackage, transformPackage)
 	} else if (node.nodeType == ARRAY) {
 		val nodeElements = node.elements()
-		if (!nodeElements.hasNext()) throw RuntimeException("Can't handle empty arrays")
-		val firstElement = nodeElements.next()
+
+		val element = if (nodeElements.hasNext()) {
+			nodeElements.next()
+		} else {
+			ObjectMapper().readTree("{}")
+		}
+
 		val pojoName = pojoNameFromArrayNodeName(nodeName)
-		return generate(firstElement, pojoName, domainPackage, entityPackage, transformPackage)
+		return generate(element, pojoName, domainPackage, entityPackage, transformPackage)
 	} else {
 		return  null
 	}

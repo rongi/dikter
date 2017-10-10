@@ -66,8 +66,6 @@ class Test {
 		assertEquals(expectedTransform, transform.toString())
 	}
 
-	// TODO-DMITRY handle empty arrays
-
 	private fun getFile(name: String) = getFile(name, javaClass)
 
 }

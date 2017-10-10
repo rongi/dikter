@@ -1,8 +1,10 @@
 package com.example.test.transform;
 
+import com.example.test.domain.CommentRest;
 import com.example.test.domain.StatusRest;
 import com.example.test.domain.SubscriberRest;
 import com.example.test.domain.UserRest;
+import com.example.test.entity.Comment;
 import com.example.test.entity.Status;
 import com.example.test.entity.Subscriber;
 import com.example.test.entity.User;
@@ -20,6 +22,7 @@ public final class UserTransform {
         entity.setHeight(rest.height);
         entity.setSubscribers(subscribersFromRest(rest.subscribers));
         entity.setStatus(statusFromRest(rest.status));
+        entity.setComments(commentsFromRest(rest.comments));
 
         return entity;
     }
@@ -34,6 +37,7 @@ public final class UserTransform {
         rest.height = entity.getHeight();
         rest.subscribers = subscribersFromEntity(entity.getSubscribers());
         rest.status = statusFromEntity(entity.getStatus());
+        rest.comments = commentsFromEntity(entity.getComments());
 
         return rest;
     }
@@ -56,6 +60,19 @@ public final class UserTransform {
         return StatusTransform.fromRest(rest);
     }
 
+    private static List<Comment> commentsFromRest(List<CommentRest> rests) {
+        List<Comment> entities = new ArrayList<>();
+
+        if (rests != null) {
+            for (CommentRest rest : rests) {
+                Comment entity = CommentTransform.fromRest(rest);
+                entities.add(entity);
+            }
+        }
+
+        return entities;
+    }
+
     private static List<SubscriberRest> subscribersFromEntity(List<Subscriber> entities) {
         List<SubscriberRest> rests = new ArrayList<>();
 
@@ -72,5 +89,18 @@ public final class UserTransform {
     private static StatusRest statusFromEntity(Status entity) {
         if (entity == null) return null;
         return StatusTransform.fromEntity(entity);
+    }
+
+    private static List<CommentRest> commentsFromEntity(List<Comment> entities) {
+        List<CommentRest> rests = new ArrayList<>();
+
+        if (entities != null) {
+            for (Comment entity : entities) {
+                CommentRest rest = CommentTransform.fromEntity(entity);
+                rests.add(rest);
+            }
+        }
+
+        return rests;
     }
 }

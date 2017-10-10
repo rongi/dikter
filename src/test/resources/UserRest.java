@@ -21,4 +21,7 @@ public final class UserRest {
 
     @SerializedName("status")
     public StatusRest status;
+
+    @SerializedName("comments")
+    public List<CommentRest> comments;
 }
