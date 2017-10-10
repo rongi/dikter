@@ -15,7 +15,7 @@ fun generateTransform(pojoName: String, domainFile: JavaFile, entityFile: JavaFi
 	val domainType = ClassName.get(domainFile.packageName, domainFile.typeSpec.name)
 	val entityType = ClassName.get(entityFile.packageName, entityFile.typeSpec.name)
 
-	val fromRestSpecBuilder = MethodSpec.methodBuilder("fromRest")
+	val fromRestSpecBuilder = MethodSpec.methodBuilder("toEntity")
 		.addModifiers(PUBLIC, STATIC)
 		.addParameter(domainType, "rest")
 		.addStatement("if (rest == null) return null")
@@ -26,7 +26,7 @@ fun generateTransform(pojoName: String, domainFile: JavaFile, entityFile: JavaFi
 		.addStatement("return entity")
 		.returns(entityType);
 
-	val fromEntitySpecBuilder = MethodSpec.methodBuilder("fromEntity")
+	val fromEntitySpecBuilder = MethodSpec.methodBuilder("toRest")
 		.addModifiers(PUBLIC, STATIC)
 		.addParameter(entityType, "entity")
 		.addStatement("if (entity == null) return null")
@@ -71,7 +71,7 @@ fun complexTransformsFromDomain(toFields: MutableList<FieldSpec>, fromFile: Java
 			val parameterType = ParameterizedTypeName.get(listClassName, domainItemType)
 			val fieldTransformType = ClassName.get(transformPackage, "${fieldItemType.simpleName()}${TRANSFORM_SUFFIX}")
 
-			val methodSpec = MethodSpec.methodBuilder("${it.name}FromRest")
+			val methodSpec = MethodSpec.methodBuilder("${it.name}ToEntity")
 				.addModifiers(PRIVATE, STATIC)
 				.addParameter(parameterType, "rests")
 				.returns(type)
@@ -79,7 +79,7 @@ fun complexTransformsFromDomain(toFields: MutableList<FieldSpec>, fromFile: Java
 				.newLine()
 				.beginControlFlow("if (rests != null)")
 				.beginControlFlow("for (\$T rest : rests)", domainItemType)
-				.addStatement("\$T entity = \$T.fromRest(rest)", fieldItemType, fieldTransformType)
+				.addStatement("\$T entity = \$T.toEntity(rest)", fieldItemType, fieldTransformType)
 				.addStatement("entities.add(entity)")
 				.endControlFlow()
 				.endControlFlow()
@@ -92,12 +92,12 @@ fun complexTransformsFromDomain(toFields: MutableList<FieldSpec>, fromFile: Java
 			val domainType = ClassName.get(fromFile.packageName, "${type.simpleName()}${DOMAIN_SUFFIX}")
 			val fieldTransformType = ClassName.get(transformPackage, "${type.simpleName()}${TRANSFORM_SUFFIX}")
 
-			val methodSpec = MethodSpec.methodBuilder("${it.name}FromRest")
+			val methodSpec = MethodSpec.methodBuilder("${it.name}ToEntity")
 				.addModifiers(PRIVATE, STATIC)
 				.addParameter(domainType, "rest")
 				.returns(type)
 				.addStatement("if (rest == null) return null")
-				.addStatement("return \$T.fromRest(rest)", fieldTransformType)
+				.addStatement("return \$T.toEntity(rest)", fieldTransformType)
 				.build()
 
 			methods.add(methodSpec)
@@ -122,7 +122,7 @@ fun complexTransformsFromEntity(toFields: MutableList<FieldSpec>, fromFile: Java
 			val parameterType = ParameterizedTypeName.get(listClassName, fromItemType)
 			val fieldTransformType = ClassName.get(transformPackage, "${fieldItemType.simpleName().removeSuffix(DOMAIN_SUFFIX)}${TRANSFORM_SUFFIX}")
 
-			val methodSpec = MethodSpec.methodBuilder("${it.name}FromEntity")
+			val methodSpec = MethodSpec.methodBuilder("${it.name}ToRest")
 				.addModifiers(PRIVATE, STATIC)
 				.addParameter(parameterType, "entities")
 				.returns(type)
@@ -130,7 +130,7 @@ fun complexTransformsFromEntity(toFields: MutableList<FieldSpec>, fromFile: Java
 				.newLine()
 				.beginControlFlow("if (entities != null)")
 				.beginControlFlow("for (\$T entity : entities)", fromItemType)
-				.addStatement("\$T rest = \$T.fromEntity(entity)", fieldItemType, fieldTransformType)
+				.addStatement("\$T rest = \$T.toRest(entity)", fieldItemType, fieldTransformType)
 				.addStatement("rests.add(rest)")
 				.endControlFlow()
 				.endControlFlow()
@@ -143,12 +143,12 @@ fun complexTransformsFromEntity(toFields: MutableList<FieldSpec>, fromFile: Java
 			val domainType = ClassName.get(fromFile.packageName, "${type.simpleName().removeSuffix(DOMAIN_SUFFIX)}")
 			val fieldTransformType = ClassName.get(transformPackage, "${type.simpleName().removeSuffix(DOMAIN_SUFFIX)}${TRANSFORM_SUFFIX}")
 
-			val methodSpec = MethodSpec.methodBuilder("${it.name}FromEntity")
+			val methodSpec = MethodSpec.methodBuilder("${it.name}ToRest")
 				.addModifiers(PRIVATE, STATIC)
 				.addParameter(domainType, "entity")
 				.returns(type)
 				.addStatement("if (entity == null) return null")
-				.addStatement("return \$T.fromEntity(entity)", fieldTransformType)
+				.addStatement("return \$T.toRest(entity)", fieldTransformType)
 				.build()
 
 			methods.add(methodSpec)
@@ -162,9 +162,9 @@ fun MethodSpec.Builder.addFromRestCopyStatements(fields: MutableList<FieldSpec>,
 	fields.forEach {
 		val type = it.type
 		val parameter = if (isList(it)) {
-			"${it.name}FromRest(rest.${it.name})"
+			"${it.name}ToEntity(rest.${it.name})"
 		} else if (type is ClassName && type.packageName() == entityFile.packageName) {
-			"${it.name}FromRest(rest.${it.name})"
+			"${it.name}ToEntity(rest.${it.name})"
 		} else {
 			"rest.${it.name}"
 		}
@@ -178,9 +178,9 @@ fun MethodSpec.Builder.addFromEntityCopyStatements(fields: kotlin.collections.Li
 	fields.forEach {
 		val type = it.type
 		val parameter = if (isList(it)) {
-			"${it.name}FromEntity(entity.get${it.name.capitalize()}())"
+			"${it.name}ToRest(entity.get${it.name.capitalize()}())"
 		} else if (type is ClassName && type.packageName() == entityFile.packageName) {
-			"${it.name}FromEntity(entity.get${it.name.capitalize()}())"
+			"${it.name}ToRest(entity.get${it.name.capitalize()}())"
 		} else {
 			"entity.get${it.name.capitalize()}()"
 		}

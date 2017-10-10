@@ -119,8 +119,6 @@ class Test {
 		assertEquals(expectedTransform, transform.toString())
 	}
 
-	// TODO-DMITRY rename to toEntity
-
 	// TODO-DMITRY handle non object arrays
 
 	private fun getFile(name: String) = getFile(name, javaClass)

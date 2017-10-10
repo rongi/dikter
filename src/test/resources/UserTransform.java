@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class UserTransform {
-    public static User fromRest(UserRest rest) {
+    public static User toEntity(UserRest rest) {
         if (rest == null) return null;
         User entity = new User();
 
@@ -22,15 +22,15 @@ public abstract class UserTransform {
         entity.setAge(rest.age);
         entity.setKawaii(rest.kawaii);
         entity.setHeight(rest.height);
-        entity.setSubscribers(subscribersFromRest(rest.subscribers));
-        entity.setStatus(statusFromRest(rest.status));
-        entity.setComments(commentsFromRest(rest.comments));
-        entity.setImage(imageFromRest(rest.image));
+        entity.setSubscribers(subscribersToEntity(rest.subscribers));
+        entity.setStatus(statusToEntity(rest.status));
+        entity.setComments(commentsToEntity(rest.comments));
+        entity.setImage(imageToEntity(rest.image));
 
         return entity;
     }
 
-    public static UserRest fromEntity(User entity) {
+    public static UserRest toRest(User entity) {
         if (entity == null) return null;
         UserRest rest = new UserRest();
 
@@ -38,20 +38,20 @@ public abstract class UserTransform {
         rest.age = entity.getAge();
         rest.kawaii = entity.getKawaii();
         rest.height = entity.getHeight();
-        rest.subscribers = subscribersFromEntity(entity.getSubscribers());
-        rest.status = statusFromEntity(entity.getStatus());
-        rest.comments = commentsFromEntity(entity.getComments());
-        rest.image = imageFromEntity(entity.getImage());
+        rest.subscribers = subscribersToRest(entity.getSubscribers());
+        rest.status = statusToRest(entity.getStatus());
+        rest.comments = commentsToRest(entity.getComments());
+        rest.image = imageToRest(entity.getImage());
 
         return rest;
     }
 
-    private static List<Subscriber> subscribersFromRest(List<SubscriberRest> rests) {
+    private static List<Subscriber> subscribersToEntity(List<SubscriberRest> rests) {
         List<Subscriber> entities = new ArrayList<>();
 
         if (rests != null) {
             for (SubscriberRest rest : rests) {
-                Subscriber entity = SubscriberTransform.fromRest(rest);
+                Subscriber entity = SubscriberTransform.toEntity(rest);
                 entities.add(entity);
             }
         }
@@ -59,17 +59,17 @@ public abstract class UserTransform {
         return entities;
     }
 
-    private static Status statusFromRest(StatusRest rest) {
+    private static Status statusToEntity(StatusRest rest) {
         if (rest == null) return null;
-        return StatusTransform.fromRest(rest);
+        return StatusTransform.toEntity(rest);
     }
 
-    private static List<Comment> commentsFromRest(List<CommentRest> rests) {
+    private static List<Comment> commentsToEntity(List<CommentRest> rests) {
         List<Comment> entities = new ArrayList<>();
 
         if (rests != null) {
             for (CommentRest rest : rests) {
-                Comment entity = CommentTransform.fromRest(rest);
+                Comment entity = CommentTransform.toEntity(rest);
                 entities.add(entity);
             }
         }
@@ -77,17 +77,17 @@ public abstract class UserTransform {
         return entities;
     }
 
-    private static Image imageFromRest(ImageRest rest) {
+    private static Image imageToEntity(ImageRest rest) {
         if (rest == null) return null;
-        return ImageTransform.fromRest(rest);
+        return ImageTransform.toEntity(rest);
     }
 
-    private static List<SubscriberRest> subscribersFromEntity(List<Subscriber> entities) {
+    private static List<SubscriberRest> subscribersToRest(List<Subscriber> entities) {
         List<SubscriberRest> rests = new ArrayList<>();
 
         if (entities != null) {
             for (Subscriber entity : entities) {
-                SubscriberRest rest = SubscriberTransform.fromEntity(entity);
+                SubscriberRest rest = SubscriberTransform.toRest(entity);
                 rests.add(rest);
             }
         }
@@ -95,17 +95,17 @@ public abstract class UserTransform {
         return rests;
     }
 
-    private static StatusRest statusFromEntity(Status entity) {
+    private static StatusRest statusToRest(Status entity) {
         if (entity == null) return null;
-        return StatusTransform.fromEntity(entity);
+        return StatusTransform.toRest(entity);
     }
 
-    private static List<CommentRest> commentsFromEntity(List<Comment> entities) {
+    private static List<CommentRest> commentsToRest(List<Comment> entities) {
         List<CommentRest> rests = new ArrayList<>();
 
         if (entities != null) {
             for (Comment entity : entities) {
-                CommentRest rest = CommentTransform.fromEntity(entity);
+                CommentRest rest = CommentTransform.toRest(entity);
                 rests.add(rest);
             }
         }
@@ -113,8 +113,8 @@ public abstract class UserTransform {
         return rests;
     }
 
-    private static ImageRest imageFromEntity(Image entity) {
+    private static ImageRest imageToRest(Image entity) {
         if (entity == null) return null;
-        return ImageTransform.fromEntity(entity);
+        return ImageTransform.toRest(entity);
     }
 }
