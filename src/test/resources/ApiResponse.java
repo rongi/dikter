@@ -1,7 +1,10 @@
 package com.example.test.entity;
 
+import org.parceler.Parcel;
+
+@Parcel
 public final class ApiResponse {
-    private User user;
+    User user;
 
     public User getUser() {
         return user;

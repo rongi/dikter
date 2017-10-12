@@ -1,23 +1,25 @@
 package com.example.test.entity;
 
 import java.util.List;
+import org.parceler.Parcel;
 
+@Parcel
 public final class User {
-    private String name;
+    String name;
 
-    private long age;
+    long age;
 
-    private boolean kawaii;
+    boolean kawaii;
 
-    private double height;
+    double height;
 
-    private List<Subscriber> subscribers;
+    List<Subscriber> subscribers;
 
-    private Status status;
+    Status status;
 
-    private List<Comment> comments;
+    List<Comment> comments;
 
-    private Image image;
+    Image image;
 
     public String getName() {
         return name;

@@ -97,7 +97,7 @@ private fun generateEntity(json: JsonNode, pojoName: String, packageName: String
 
 		val fieldName = nodeName;
 		val fieldType = javaTypeFromJsonType(node, nodeName, packageName, ::entityNameFromPojoName)
-		val fieldSpec = FieldSpec.builder(fieldType, fieldName, PRIVATE).build()
+		val fieldSpec = FieldSpec.builder(fieldType, fieldName).build()
 
 		val getterName = getterNameFor(fieldName)
 		val getterSpec = MethodSpec.methodBuilder(getterName)
@@ -119,7 +119,9 @@ private fun generateEntity(json: JsonNode, pojoName: String, packageName: String
 	}
 
 	val className = entityNameFromPojoName(pojoName)
+	val parcelAnnotation = AnnotationSpec.builder(ClassName.bestGuess("org.parceler.Parcel")).build()
 	val typeSpecBuilder = TypeSpec.classBuilder(className)
+		.addAnnotation(parcelAnnotation)
 		.addFields(fieldSpecs)
 		.addMethods(methodSpecs)
 		.addModifiers(PUBLIC, FINAL)
